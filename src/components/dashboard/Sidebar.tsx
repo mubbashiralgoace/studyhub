@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogOut, User, BookOpen } from "lucide-react";
+import { LogOut, User, BookOpen, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,13 +13,16 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-
   {
     href: "/dashboard/notes",
     label: "University Notes",
     icon: BookOpen,
   },
-
+  {
+    href: "/dashboard/youtube",
+    label: "YouTube Summaries",
+    icon: Youtube,
+  },
 ];
 
 export function Sidebar() {
