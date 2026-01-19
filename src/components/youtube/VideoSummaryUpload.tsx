@@ -52,6 +52,16 @@ export function VideoSummaryUpload({ onUploadSuccess }: VideoSummaryUploadProps)
       const data = await response.json();
 
       if (!response.ok) {
+        // Check if quota exceeded
+        if (data.quotaExceeded) {
+          toast({
+            title: "Quota Limit Exceeded",
+            description: data.message || `You have reached your free limit. Please upgrade to generate more summaries.`,
+            variant: "destructive",
+          });
+          return;
+        }
+        
         const errorMsg = data.error || "Failed to generate summary";
         const details = data.details ? `\n\nDetails: ${data.details}` : '';
         const suggestion = data.suggestion ? `\n\n${data.suggestion}` : '';

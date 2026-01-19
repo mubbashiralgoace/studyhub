@@ -91,8 +91,19 @@ export function DocumentUpload({ onUploadSuccess }: DocumentUploadProps) {
       setUploadProgress(100);
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Upload failed');
+        const errorData = await response.json();
+        
+        // Check if quota exceeded
+        if (errorData.quotaExceeded) {
+          toast({
+            title: "Quota Limit Exceeded",
+            description: errorData.message || `You have reached your free limit. Please upgrade to upload more documents.`,
+            variant: "destructive",
+          });
+          return;
+        }
+        
+        throw new Error(errorData.error || 'Upload failed');
       }
 
       const data = await response.json();

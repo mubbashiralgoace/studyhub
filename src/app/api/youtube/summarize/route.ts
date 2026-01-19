@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if summary already exists
+    // Check if summary already exists for THIS video
     const { data: existingSummary } = await supabase
       .from('video_summaries')
       .select('id, summary, video_title, video_id')
@@ -75,6 +75,30 @@ export async function POST(request: NextRequest) {
         videoTitle: existingSummary.video_title,
         cached: true,
       });
+    }
+
+    // Check quota limit - free users can only have 1 video summary
+    const FREE_VIDEO_LIMIT = 10;
+    const { count: videoCount, error: countError } = await supabase
+      .from('video_summaries')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId);
+
+    if (countError) {
+      console.error('Error checking video count:', countError);
+    }
+
+    if (videoCount !== null && videoCount >= FREE_VIDEO_LIMIT) {
+      return NextResponse.json(
+        { 
+          error: 'Quota limit exceeded',
+          message: `You have reached your free limit of ${FREE_VIDEO_LIMIT} video summary. Please upgrade to generate more summaries.`,
+          quotaExceeded: true,
+          currentCount: videoCount,
+          limit: FREE_VIDEO_LIMIT,
+        },
+        { status: 403 }
+      );
     }
 
     // Fetch transcript from YouTube
@@ -274,7 +298,7 @@ export async function POST(request: NextRequest) {
     // Generate summary using OpenAI
     const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-5-nano',
       messages: [
         {
           role: 'system',

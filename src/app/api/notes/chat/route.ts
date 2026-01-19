@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
     // Generate answer using OpenAI
     const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // or 'gpt-3.5-turbo' for cheaper option
+      model: 'gpt-5-nano', // or 'gpt-3.5-turbo' for cheaper option
       messages: [
         {
           role: 'system',

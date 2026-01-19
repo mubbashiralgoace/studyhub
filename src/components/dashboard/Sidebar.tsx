@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogOut, User, BookOpen, Youtube } from "lucide-react";
+import { LogOut, User, BookOpen, Youtube, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -22,6 +22,11 @@ const navItems = [
     href: "/dashboard/youtube",
     label: "YouTube Summaries",
     icon: Youtube,
+  },
+  {
+    href: "/dashboard/quiz",
+    label: "Quiz Generator",
+    icon: Brain,
   },
 ];
 

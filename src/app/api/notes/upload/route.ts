@@ -21,6 +21,30 @@ export async function POST(request: NextRequest) {
 
     const userId = session.user.id;
 
+    // Check quota limit - free users can only upload 1 document
+    const FREE_DOCUMENT_LIMIT = 1;
+    const { count: documentCount, error: countError } = await supabase
+      .from('documents')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId);
+
+    if (countError) {
+      console.error('Error checking document count:', countError);
+    }
+
+    if (documentCount !== null && documentCount >= FREE_DOCUMENT_LIMIT) {
+      return NextResponse.json(
+        { 
+          error: 'Quota limit exceeded',
+          message: `You have reached your free limit of ${FREE_DOCUMENT_LIMIT} document(s). Please upgrade to upload more documents.`,
+          quotaExceeded: true,
+          currentCount: documentCount,
+          limit: FREE_DOCUMENT_LIMIT,
+        },
+        { status: 403 }
+      );
+    }
+
     // Get form data
     const formData = await request.formData();
     const file = formData.get('file') as File;
