@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     };
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-5-nano',
+        model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',
@@ -142,8 +142,7 @@ Rules:
           content: `Generate ${questionCount} quiz questions from this content:\n\n${contentForQuiz.substring(0, 8000)}`,
         },
       ],
-      temperature: 0.7,
-      max_tokens: 2000,
+        max_tokens: 2000,
     });
 
     const responseText = completion.choices[0]?.message?.content || '';

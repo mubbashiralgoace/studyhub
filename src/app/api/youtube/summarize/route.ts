@@ -298,7 +298,7 @@ export async function POST(request: NextRequest) {
     // Generate summary using OpenAI
     const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
-      model: 'gpt-5-nano',
+        model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',
@@ -316,8 +316,7 @@ Format the summary with clear headings and bullet points where appropriate.`,
           content: `Please summarize the following YouTube video transcript:\n\n${transcriptText.substring(0, 15000)}`, // Limit to avoid token limits
         },
       ],
-      temperature: 0.7,
-      max_tokens: 2000,
+        max_tokens: 2000,
     });
 
     const summary = completion.choices[0]?.message?.content || 'Unable to generate summary.';

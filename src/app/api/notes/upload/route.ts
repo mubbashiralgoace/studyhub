@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const userId = session.user.id;
 
     // Check quota limit - free users can only upload 1 document
-    const FREE_DOCUMENT_LIMIT = 1;
+    const FREE_DOCUMENT_LIMIT = 10;
     const { count: documentCount, error: countError } = await supabase
       .from('documents')
       .select('*', { count: 'exact', head: true })

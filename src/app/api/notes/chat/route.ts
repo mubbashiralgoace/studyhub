@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
     // Generate answer using OpenAI
     const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
-      model: 'gpt-5-nano', // or 'gpt-3.5-turbo' for cheaper option
+        model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',
@@ -136,8 +136,7 @@ Be concise and clear. Format your answers with proper structure when needed.`,
           content: `Context from notes:\n\n${context}\n\nQuestion: ${query}\n\nAnswer based on the context above:`,
         },
       ],
-      temperature: 0.7,
-      max_tokens: 1000,
+        max_tokens: 1000,
     });
 
     const answer = completion.choices[0]?.message?.content || 'Unable to generate answer.';
