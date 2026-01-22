@@ -60,7 +60,7 @@ export default function SignInForm() {
     });
 
     toast({ description: "Signed in successfully" });
-    router.push("/dashboard/notes");
+    router.push("/dashboard");
   };
 
   const handleGoogleSignIn = async () => {
