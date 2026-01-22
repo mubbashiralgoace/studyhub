@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import { VideoSummaryUpload } from "@/components/youtube/VideoSummaryUpload";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Youtube, Trash2, Loader2, ExternalLink } from "lucide-react";
+import { Youtube, Trash2, Loader2, ExternalLink, Share2 } from "lucide-react";
+import { ShareDialog } from "@/components/share/ShareDialog";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -295,12 +296,33 @@ export default function YouTubePage() {
         <div className="h-full min-h-0 overflow-hidden">
           <Card className="h-full border border-slate-200 shadow-lg flex flex-col">
             <CardHeader className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-t-lg flex-shrink-0">
-              <CardTitle className="text-white">Video Summary</CardTitle>
-              <CardDescription className="text-indigo-100">
-                {selectedVideo 
-                  ? `Summary for: ${selectedVideo.video_title || 'YouTube Video'}`
-                  : "Select a video to view its summary"}
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-white">Video Summary</CardTitle>
+                  <CardDescription className="text-indigo-100">
+                    {selectedVideo 
+                      ? `Summary for: ${selectedVideo.video_title || 'YouTube Video'}`
+                      : "Select a video to view its summary"}
+                  </CardDescription>
+                </div>
+                {selectedVideo && (
+                  <ShareDialog
+                    type="summary"
+                    title={selectedVideo.video_title || "YouTube Video Summary"}
+                    content={selectedVideo.summary}
+                    trigger={
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="gap-2 bg-white/10 border-white/30 text-white hover:bg-white/20"
+                      >
+                        <Share2 className="h-4 w-4" />
+                        Share
+                      </Button>
+                    }
+                  />
+                )}
+              </div>
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto pt-6">
               {selectedVideo ? (

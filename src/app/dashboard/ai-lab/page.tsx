@@ -33,9 +33,11 @@ import {
   Loader2,
   CheckCircle2,
   ChevronRight,
+  Share2,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { ShareDialog } from "@/components/share/ShareDialog";
 
 type Flashcard = {
   front: string;
@@ -539,6 +541,22 @@ export default function AILabPage() {
             {flashcards.length > 0 && (
               <>
                 <Separator />
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-slate-700">
+                    {flashcards.length} Flashcards Generated
+                  </p>
+                  <ShareDialog
+                    type="flashcards"
+                    title={`${flashcards.length} Flashcards`}
+                    content={flashcards}
+                    trigger={
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <Share2 className="h-4 w-4" />
+                        Share Flashcards
+                      </Button>
+                    }
+                  />
+                </div>
                 <div className="grid gap-3 md:grid-cols-2">
                   {flashcards.map((card, idx) => (
                     <div
@@ -599,6 +617,22 @@ export default function AILabPage() {
               </Button>
               {concepts.length > 0 && (
                 <>
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-slate-700">
+                      {concepts.length} Concepts Extracted
+                    </p>
+                    <ShareDialog
+                      type="concepts"
+                      title={`${concepts.length} Key Concepts`}
+                      content={{ concepts, conceptMap }}
+                      trigger={
+                        <Button variant="outline" size="sm" className="gap-2">
+                          <Share2 className="h-4 w-4" />
+                          Share
+                        </Button>
+                      }
+                    />
+                  </div>
                   <div className="space-y-3">
                     {concepts.map((concept, idx) => (
                       <div
@@ -740,25 +774,43 @@ export default function AILabPage() {
               )}
             </Button>
             {plan.length > 0 && (
-              <div className="space-y-3">
-                {plan.map((item, idx) => (
-                  <div
-                    key={`${item.title}-${idx}`}
-                    className="rounded-xl border border-slate-200 bg-white p-4"
-                  >
-                    <div className="flex items-center justify-between">
-                      <p className="font-semibold text-slate-900">{item.title}</p>
-                      <Badge variant="outline">Focus</Badge>
+              <>
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-slate-700">
+                    {plan.length}-Day Study Plan
+                  </p>
+                  <ShareDialog
+                    type="study-plan"
+                    title={`${plan.length}-Day Study Plan: ${focusArea || "General"}`}
+                    content={plan}
+                    trigger={
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <Share2 className="h-4 w-4" />
+                        Share Plan
+                      </Button>
+                    }
+                  />
+                </div>
+                <div className="space-y-3">
+                  {plan.map((item, idx) => (
+                    <div
+                      key={`${item.title}-${idx}`}
+                      className="rounded-xl border border-slate-200 bg-white p-4"
+                    >
+                      <div className="flex items-center justify-between">
+                        <p className="font-semibold text-slate-900">{item.title}</p>
+                        <Badge variant="outline">Day {idx + 1}</Badge>
+                      </div>
+                      <p className="text-sm text-slate-600">{item.focus}</p>
+                      <ul className="mt-2 space-y-1 text-sm text-slate-700 list-disc list-inside">
+                        {item.actions.map((action, actIdx) => (
+                          <li key={`${action}-${actIdx}`}>{action}</li>
+                        ))}
+                      </ul>
                     </div>
-                    <p className="text-sm text-slate-600">{item.focus}</p>
-                    <ul className="mt-2 space-y-1 text-sm text-slate-700 list-disc list-inside">
-                      {item.actions.map((action, actIdx) => (
-                        <li key={`${action}-${actIdx}`}>{action}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              </>
             )}
           </CardContent>
         </Card>
